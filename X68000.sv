@@ -124,7 +124,7 @@ module emu
 );
 
 assign ADC_BUS  = 'Z;
-assign USER_OUT  = '1;
+//assign USER_OUT  = '1;
 
 assign AUDIO_MIX = 0;
 assign VGA_SL    = 0;
@@ -301,7 +301,21 @@ assign CLK_VIDEO = clk_vid;
 assign AUDIO_S = 1;
 
 wire disk_led;
-
+	
+wire dir;
+wire step;
+wire sel0;
+wire motor0;
+wire sel1;
+wire motor1;
+	
+always @(posedge clk_sys) begin
+	assign USER_OUT[1] <= dir;
+	assign USER_OUT[5] <= step;
+	assign USER_OUT[4] <= sel0;
+	assign USER_OUT[3] <= motor0;
+end
+	
 X68K_top X68K_top
 (
 	.ramclk(clk_ram),
@@ -351,6 +365,13 @@ X68K_top X68K_top
 	.pFd_WPTn(1),
 	.pFd_RDATAn(1),
 	.pFd_DSKCHG(1),
+	
+	.pFd_DIRn(dir),
+	.pFd_STEPn(step),
+	.pFd_DS0(sel0),
+	.pFd_MOTOR0(motor0),
+	.pFd_DS1(sel1),
+	.pFd_MOTOR1(motor1),	
 
 	.LED(disk_led),
 
